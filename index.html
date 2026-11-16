@@ -78,13 +78,36 @@
   .modal-cap b{color:#047857}
   footer{text-align:center;margin-top:34px;font-size:14px}
   footer a{color:var(--teal);text-decoration:underline;font-weight:600}
+  .top-right{display:flex;gap:8px;align-items:center}
+  .theme-btn{border:1px solid var(--line);background:#fff;border-radius:999px;width:38px;height:38px;font-size:17px;cursor:pointer;line-height:1;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  body.dark{--mint:#0a1f1b;--ink:#e2f5ef;--muted:#8fd8c8;--line:#1e453d;--card:#122e29;--teal-light:#134e4a;--teal-dark:#5eead4;--shadow:0 8px 24px rgba(0,0,0,.4)}
+  body.dark .theme-btn{background:#122e29;border-color:#1e453d}
+  body.dark .lang{background:#122e29}
+  body.dark .lang-btn{color:#a7f3d0}
+  body.dark .chip span{color:#2dd4bf}
+  body.dark h1 .accent{color:#2dd4bf}
+  body.dark .drop{background:#0f2a26}
+  body.dark .drop:hover,body.dark .drop.drag{background:#134e4a}
+  body.dark .btn-primary:hover{background:#0f766e}
+  body.dark .btn-ghost{background:#134e4a;color:#e2f5ef}
+  body.dark .btn-outline{background:#122e29}
+  body.dark .pill{background:#14532d;color:#bbf7d0;border-color:#166534}
+  body.dark .summary{background:#052e22;border-color:#065f46;color:#a7f3d0}
+  body.dark .item{background:#122e29}
+  body.dark .item .sizes b,body.dark .modal-cap b{color:#6ee7b7}
+  body.dark .item .miss{color:#fbbf24}
+  body.dark .row input[type=number],body.dark .row select{background:#0f2a26;color:#e2f5ef}
+  body.dark .row input[type=range]{accent-color:#2dd4bf}
+  body.dark .modal-box{background:#122e29}
+  body.dark .error{background:#2a1215;border-color:#7f1d1d;color:#fca5a5}
+  body.dark footer a{color:#2dd4bf}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="topbar">
     <div class="brand"><img class="brand-icon" src="icon.png?v=2" alt=""> Image Compressor</div>
-    <div class="lang"><button type="button" class="lang-btn active" id="langEn">English</button><button type="button" class="lang-btn" id="langMl">മലയാളം</button></div>
+    <div class="top-right"><button type="button" class="theme-btn" id="themeBtn" aria-label="Dark theme">&#127769;</button><div class="lang"><button type="button" class="lang-btn active" id="langEn">English</button><button type="button" class="lang-btn" id="langMl">മലയാളം</button></div></div>
   </header>
   <div class="intro">
     <div class="chip"><span>&#9679; </span><span data-i18n="badgePrivate">100% private</span> &nbsp;<span data-i18n="badgeNote">No login, no upload, no tracking</span></div>
@@ -479,11 +502,26 @@ document.getElementById("zipBtn").addEventListener("click", function(){
 document.getElementById("clearBtn").addEventListener("click", clearAll);
 document.getElementById("langEn").addEventListener("click", function(){ applyLang("en"); });
 document.getElementById("langMl").addEventListener("click", function(){ applyLang("ml"); });
+var themeBtn = document.getElementById("themeBtn");
+function applyTheme(mode){
+  document.body.classList.toggle("dark", mode === "dark");
+  themeBtn.textContent = mode === "dark" ? "☀️" : "🌙";
+  try { localStorage.setItem("img-compressor-theme", mode); } catch(e){}
+}
+themeBtn.addEventListener("click", function(){
+  applyTheme(document.body.classList.contains("dark") ? "light" : "dark");
+});
 (function init(){
   var saved = "en";
   try { saved = localStorage.getItem("img-compressor-lang") || "en"; } catch(e){}
   if (saved !== "en" && saved !== "ml"){ saved = "en"; }
   applyLang(saved);
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem("img-compressor-theme"); } catch(e){}
+  if (savedTheme !== "dark" && savedTheme !== "light"){
+    savedTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+  }
+  applyTheme(savedTheme);
 })();
 </script>
 </body>
