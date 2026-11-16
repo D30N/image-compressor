@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Compressor - Compress Photos Online Free</title>
+<meta name="description" content="Compress JPG, PNG and WebP images free in your browser. No login, no upload.">
+<style>
+  :root{--grad:linear-gradient(90deg,#f97316,#ec4899,#8b5cf6);--pink:#ec4899;--green:#16a34a;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:18px;--shadow:0 10px 30px rgba(0,0,0,.06)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f9fafb;color:#111827}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 16px 60px}
+  header{text-align:center}
+  .lang{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .lang-btn{border:0;background:none;padding:7px 16px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;color:#374151;font-family:inherit}
+  .lang-btn.active{background:#111827;color:#fff}
+  .badge{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;color:#374151;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .badge span{color:var(--green)}
+  h1{font-size:clamp(30px,6vw,46px);line-height:1.12;margin:18px 0 10px;letter-spacing:-.02em}
+  h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--muted);font-size:17px;max-width:620px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:26px}
+  .drop{display:block;border:2px dashed #d1d5db;border-radius:14px;padding:38px 20px;text-align:center;cursor:default;transition:.15s;background:#fff}
+  .drop:hover,.drop.drag{border-color:var(--pink);background:#fff5f8}
+  .drop .icon{font-size:42px;line-height:1}
+  .drop h2{margin:12px 0 6px;font-size:20px}
+  .drop p{margin:0;color:var(--muted);font-size:15px}
+  .drop input{display:none}
+  .btn{display:inline-block;border:0;border-radius:999px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
+  .btn-primary{background:var(--grad);color:#fff;margin-top:16px}
+  .btn-ghost{background:#f3f4f6;color:#111827;margin-top:16px}
+  .btn-small{padding:8px 14px;font-size:13px;margin:0 6px 6px 0}
+  .btn-outline{background:#fff;border:1px solid var(--line);color:#111827}
+  .hint{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+  .error{display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:14px}
+  .error.show{display:block}
+  .settings{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+  .settings h3{margin:0 0 14px;font-size:17px}
+  .row{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+  .row label{font-size:14px;font-weight:600;min-width:150px}
+  .row input[type=range]{flex:1;min-width:140px}
+  .row input[type=number],.row select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit;background:#fff}
+  .row input[type=number]{width:110px}
+  .qval{font-weight:700;font-size:14px;min-width:44px}
+  .note{font-size:13px;color:var(--muted);margin:-6px 0 14px 162px}
+  .results{margin-top:22px}
+  .results h3{margin:0 0 12px;font-size:17px}
+  .summary{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:12px 14px;font-size:14px;font-weight:600;margin-bottom:14px}
+  .item{display:flex;gap:14px;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:#fff;align-items:center;flex-wrap:wrap}
+  .item img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
+  .item .meta{flex:1;min-width:180px}
+  .item .name{font-weight:700;font-size:14px;word-break:break-all}
+  .item .sizes{font-size:13px;color:var(--muted);margin-top:4px}
+  .item .sizes b{color:#166534}
+  .item .dims{font-size:12px;color:var(--muted);margin-top:2px}
+  .item .miss{font-size:12px;color:#b45309;margin-top:2px}
+  .actions{margin-top:6px}
+  footer{text-align:center;margin-top:34px;font-size:14px}
+  footer a{color:var(--pink);text-decoration:underline;font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="lang"><button type="button" class="lang-btn active" id="langEn">English</button><button type="button" class="lang-btn" id="langMl">മലയാളം</button></div>
+    <div style="margin-top:14px"><div class="badge"><span>&#9679; </span><span data-i18n="badgePrivate">100% private</span> &nbsp;<span data-i18n="badgeNote">No login, no upload, no tracking</span></div></div>
+    <h1><span data-i18n="h1a">Make your photos</span> <span class="grad" data-i18n="h1b">smaller, instantly</span></h1>
+    <p class="sub" data-i18n="sub">Drop your photos below. They are compressed right inside your browser, nothing is uploaded to any server.</p>
+  </header>
+
+  <main>
+    <section class="card" id="uploadCard">
+      <div class="drop" id="dropZone">
+        <div class="icon">&#128193;</div>
+        <h2 data-i18n="dropTitle">Drop your images here</h2>
+        <p data-i18n-html="dropText">Or tap the button below to choose images. JPG, PNG, WebP and GIF files work.</p>
+        <button type="button" class="btn btn-primary" id="chooseBtn" data-i18n="chooseBtn">Choose images</button>
+        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" multiple>
+      </div>
+      <p class="hint" data-i18n="hint">Your file is read only inside this browser tab. Nothing is uploaded to any server, and nothing is saved after you close the page.</p>
+      <div class="error" id="errorBox" role="alert"></div>
+
+      <div class="settings">
+        <h3 data-i18n="settingsTitle">Settings</h3>
+        <div class="row"><label for="qualityRange" data-i18n="qualityLabel">Quality</label><input type="range" id="qualityRange" min="10" max="100" value="80"><span class="qval" id="qualityVal">80%</span></div>
+        <div class="row"><label for="formatSel" data-i18n="formatLabel">Output format</label><select id="formatSel"><option value="jpeg">JPG</option><option value="png">PNG</option><option value="webp">WebP</option></select></div>
+        <p class="note" id="pngNote" style="display:none" data-i18n="pngNote">PNG is lossless, so the quality setting has no effect on it.</p>
+        <div class="row"><label for="targetInput" data-i18n="targetLabel">Target size (KB, optional)</label><input type="number" id="targetInput" min="10" data-i18n-ph="targetPh" placeholder="e.g. 200"></div>
+        <div class="row"><label data-i18n="resizeLabel">Resize (optional)</label><input type="number" id="maxW" min="1" data-i18n-ph="maxWPh" placeholder="Max width (px)"><input type="number" id="maxH" min="1" data-i18n-ph="maxHPh" placeholder="Max height (px)"><input type="number" id="scalePct" min="1" max="100" data-i18n-ph="scalePh" placeholder="Scale (%)"></div>
+      </div>
+
+      <div class="results" id="resultsBox" style="display:none">
+        <h3 data-i18n="resultsTitle">Results</h3>
+        <div class="summary" id="summaryBox"></div>
+        <div id="resultsList"></div>
+        <div class="actions"><button type="button" class="btn btn-primary btn-small" id="zipBtn" data-i18n="downloadAll">Download all (.zip)</button><button type="button" class="btn btn-ghost btn-small" id="clearBtn" data-i18n="clearAll">Clear all</button></div>
+      </div>
+      <p class="hint" id="progressText" style="display:none" data-i18n="processing">Compressing...</p>
+    </section>
+  </main>
+
+  <footer><a href="https://deepakdeon.github.io">This app was made by Deon</a></footer>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+var state = { files: [], lang: "en" };
+var dropZone = document.getElementById("dropZone");
+var fileInput = document.getElementById("fileInput");
+var errorBox = document.getElementById("errorBox");
+var resultsBox = document.getElementById("resultsBox");
+var resultsList = document.getElementById("resultsList");
+var summaryBox = document.getElementById("summaryBox");
+var progressText = document.getElementById("progressText");
+var qualityRange = document.getElementById("qualityRange");
+var qualityVal = document.getElementById("qualityVal");
+var formatSel = document.getElementById("formatSel");
+var targetInput = document.getElementById("targetInput");
+var maxWInput = document.getElementById("maxW");
+var maxHInput = document.getElementById("maxH");
+var scaleInput = document.getElementById("scalePct");
+var pngNote = document.getElementById("pngNote");
+
+var LANGS = {
+  en: {
+    badgePrivate: "100% private", badgeNote: "No login, no upload, no tracking",
+    h1a: "Make your photos", h1b: "smaller, instantly",
+    sub: "Drop your photos below. They are compressed right inside your browser, nothing is uploaded to any server.",
+    dropTitle: "Drop your images here",
+    dropText: "Or tap the button below to choose images. JPG, PNG, WebP and GIF files work.",
+    chooseBtn: "Choose images",
+    hint: "Your file is read only inside this browser tab. Nothing is uploaded to any server, and nothing is saved after you close the page.",
+    settingsTitle: "Settings", qualityLabel: "Quality", formatLabel: "Output format",
+    targetLabel: "Target size (KB, optional)", targetPh: "e.g. 200",
+    resizeLabel: "Resize (optional)", maxWPh: "Max width (px)", maxHPh: "Max height (px)", scalePh: "Scale (%)",
+    pngNote: "PNG is lossless, so the quality setting has no effect on it.",
+    resultsTitle: "Results", downloadAll: "Download all (.zip)", clearAll: "Clear all",
+    download: "Download", processing: "Compressing...",
+    smaller: "smaller", notImage: "is not an image file.",
+    targetMiss: "Target not reached, used lowest quality.",
+    summary: "Total: {a} to {b} ({s}% smaller)"
+  },
+  ml: {
+    badgePrivate: "100% private", badgeNote: "ലോഗിൻ ഇല്ല, അപ്‌ലോഡ് ഇല്ല, ട്രാക്കിംഗ് ഇല്ല",
+    h1a: "നിങ്ങളുടെ ഫോട്ടോകൾ", h1b: "ചെറുതാക്കൂ, ഉടനെ",
+    sub: "ഫോട്ടോകൾ താഴെ ഇടൂ. അവ നിങ്ങളുടെ browser-ൽ തന്നെ compress ചെയ്യും, ഒന്നും server-ലേക്ക് upload ആകില്ല.",
+    dropTitle: "നിങ്ങളുടെ ഫോട്ടോകൾ ഇവിടെ ഇടുക",
+    dropText: "അല്ലെങ്കിൽ ഫോട്ടോ തിരഞ്ഞെടുക്കാൻ താഴെയുള്ള ബട്ടൺ ടാപ്പ് ചെയ്യുക. JPG, PNG, WebP, GIF ഫയലുകൾ വർക്ക് ചെയ്യും.",
+    chooseBtn: "ഫോട്ടോകൾ തിരഞ്ഞെടുക്കുക",
+    hint: "നിങ്ങളുടെ ഫയൽ ഈ browser tab-ൽ മാത്രമേ വായിക്കൂ. ഒന്നും server-ലേക്ക് upload ആകില്ല, പേജ് അടച്ചാൽ ഒന്നും save ആകില്ല.",
+    settingsTitle: "ക്രമീകരണങ്ങൾ", qualityLabel: "Quality", formatLabel: "Output format",
+    targetLabel: "Target size (KB, optional)", targetPh: "ഉദാ. 200",
+    resizeLabel: "Resize (optional)", maxWPh: "Max width (px)", maxHPh: "Max height (px)", scalePh: "Scale (%)",
+    pngNote: "PNG lossless ആണ്, അതുകൊണ്ട് quality setting അതിന് ബാധകമല്ല.",
+    resultsTitle: "ഫലങ്ങൾ", downloadAll: "എല്ലാം download ചെയ്യുക (.zip)", clearAll: "എല്ലാം മായ്ക്കുക",
+    download: "Download", processing: "Compress ചെയ്യുന്നു...",
+    smaller: "കുറവ്", notImage: "ഒരു image ഫയൽ അല്ല.",
+    targetMiss: "Target എത്തിയില്ല, ഏറ്റവും കുറഞ്ഞ quality ഉപയോഗിച്ചു.",
+    summary: "ആകെ: {a} മുതൽ {b} വരെ ({s}% കുറവ്)"
+  }
+};
+function t(key){ return (LANGS[state.lang] && LANGS[state.lang][key]) || LANGS.en[key] || key; }
+function applyLang(lang){
+  state.lang = lang;
+  try { localStorage.setItem("img-compressor-lang", lang); } catch(e){}
+  document.getElementById("langEn").classList.toggle("active", lang === "en");
+  document.getElementById("langMl").classList.toggle("active", lang === "ml");
+  document.querySelectorAll("[data-i18n]").forEach(function(el){ var k = el.getAttribute("data-i18n"); if (LANGS[lang][k]) el.textContent = LANGS[lang][k]; });
+  document.querySelectorAll("[data-i18n-html]").forEach(function(el){ var k = el.getAttribute("data-i18n-html"); if (LANGS[lang][k]) el.innerHTML = LANGS[lang][k]; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(function(el){ var k = el.getAttribute("data-i18n-ph"); if (LANGS[lang][k]) el.setAttribute("placeholder", LANGS[lang][k]); });
+  render();
+}
+function fmtBytes(n){
+  if (n < 1024) return n + " B";
+  if (n < 1024 * 1024) return (n / 1024).toFixed(1) + " KB";
+  return (n / (1024 * 1024)).toFixed(2) + " MB";
+}
+function showError(msg){ errorBox.textContent = msg; errorBox.classList.add("show"); }
+function hideError(){ errorBox.textContent = ""; errorBox.classList.remove("show"); }
+function getSettings(){
+  var format = formatSel.value;
+  return {
+    quality: parseInt(qualityRange.value, 10) / 100,
+    format: format,
+    mime: format === "png" ? "image/png" : (format === "webp" ? "image/webp" : "image/jpeg"),
+    ext: format === "png" ? "png" : (format === "webp" ? "webp" : "jpg"),
+    targetBytes: targetInput.value ? parseInt(targetInput.value, 10) * 1024 : 0,
+    maxW: maxWInput.value ? parseInt(maxWInput.value, 10) : 0,
+    maxH: maxHInput.value ? parseInt(maxHInput.value, 10) : 0,
+    scale: scaleInput.value ? parseInt(scaleInput.value, 10) : 0
+  };
+}
+function loadImageFile(file){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onload = function(){
+      var img = new Image();
+      img.onload = function(){ resolve({ img: img, dataUrl: reader.result }); };
+      img.onerror = function(){ reject(new Error("load")); };
+      img.src = reader.result;
+    };
+    reader.onerror = function(){ reject(new Error("read")); };
+    reader.readAsDataURL(file);
+  });
+}
+function computeDims(w, h, s){
+  if (s.scale > 0){
+    var f = Math.min(s.scale, 100) / 100;
+    return { w: Math.max(1, Math.round(w * f)), h: Math.max(1, Math.round(h * f)) };
+  }
+  var nw = w, nh = h;
+  if (s.maxW > 0 && nw > s.maxW){ nh = Math.round(nh * s.maxW / nw); nw = s.maxW; }
+  if (s.maxH > 0 && nh > s.maxH){ nw = Math.round(nw * s.maxH / nh); nh = s.maxH; }
+  return { w: nw, h: nh };
+}
+function canvasBlob(canvas, mime, q){
+  return new Promise(function(resolve){
+    if (canvas.toBlob) { canvas.toBlob(function(b){ resolve(b); }, mime, q); }
+    else { resolve(null); }
+  });
+}
+function processEntry(entry){
+  var s = getSettings();
+  var chain = Promise.resolve();
+  if (!entry.imgData){
+    chain = chain.then(function(){ return loadImageFile(entry.file); }).then(function(loaded){
+      entry.imgData = loaded;
+      entry.origW = loaded.img.naturalWidth;
+      entry.origH = loaded.img.naturalHeight;
+    });
+  }
+  return chain.then(function(){
+    var dims = computeDims(entry.origW, entry.origH, s);
+    var canvas = document.createElement("canvas");
+    canvas.width = dims.w; canvas.height = dims.h;
+    var ctx = canvas.getContext("2d");
+    if (s.mime === "image/jpeg"){ ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, dims.w, dims.h); }
+    ctx.drawImage(entry.imgData.img, 0, 0, dims.w, dims.h);
+    function finish(blob, qUsed, missed){
+      if (entry.result && entry.result.url){ try { URL.revokeObjectURL(entry.result.url); } catch(e){} }
+      entry.result = { blob: blob, url: URL.createObjectURL(blob), size: blob.size, w: dims.w, h: dims.h, qualityUsed: qUsed, missed: !!missed };
+      return entry;
+    }
+    if (s.targetBytes > 0 && s.format !== "png"){
+      var lo = 0.05, hi = 0.95, best = null, bestQ = 0.05, step = 0;
+      function tryNext(){
+        if (step >= 7){
+          if (best){ return finish(best, bestQ, false); }
+          return canvasBlob(canvas, s.mime, 0.05).then(function(b){ return finish(b, 0.05, true); });
+        }
+        var mid = (lo + hi) / 2;
+        step++;
+        return canvasBlob(canvas, s.mime, mid).then(function(b){
+          if (b && b.size <= s.targetBytes){ best = b; bestQ = mid; lo = mid; }
+          else { hi = mid; }
+          return tryNext();
+        });
+      }
+      return tryNext();
+    }
+    return canvasBlob(canvas, s.mime, s.format === "png" ? undefined : s.quality).then(function(b){
+      return finish(b, s.quality, s.targetBytes > 0 && b.size > s.targetBytes);
+    });
+  }).catch(function(){
+    entry.failed = true;
+    return entry;
+  });
+}
+var processing = false;
+function processAll(){
+  if (processing || state.files.length === 0){ render(); return; }
+  processing = true;
+  progressText.style.display = "block";
+  var seq = Promise.resolve();
+  state.files.forEach(function(entry){
+    seq = seq.then(function(){ return processEntry(entry); });
+  });
+  seq.then(function(){
+    processing = false;
+    progressText.style.display = "none";
+    render();
+  });
+}
+function extOf(name){ var m = name.match(/\.([^.]+)$/); return m ? m[1].toLowerCase() : ""; }
+function outName(entry){
+  var s = getSettings();
+  var base = entry.name.replace(/\.[^.]+$/, "") || "image";
+  return base + "-compressed." + s.ext;
+}
+function render(){
+  var done = state.files.filter(function(e){ return e.result && !e.failed; });
+  if (done.length === 0){ resultsBox.style.display = "none"; resultsList.innerHTML = ""; return; }
+  resultsBox.style.display = "block";
+  var totOrig = 0, totNew = 0;
+  var html = "";
+  done.forEach(function(entry){
+    var idx = state.files.indexOf(entry);
+    totOrig += entry.file.size; totNew += entry.result.size;
+    var saved = entry.file.size > 0 ? Math.round((1 - entry.result.size / entry.file.size) * 100) : 0;
+    html += '<div class="item"><img src="' + entry.result.url + '" alt="">'
+      + '<div class="meta"><div class="name">' + escapeHtml(entry.name) + '</div>'
+      + '<div class="sizes">' + fmtBytes(entry.file.size) + ' &rarr; <b>' + fmtBytes(entry.result.size) + ' (' + saved + '% ' + t("smaller") + ')</b></div>'
+      + '<div class="dims">' + entry.origW + ' &times; ' + entry.origH + ' &rarr; ' + entry.result.w + ' &times; ' + entry.result.h + '</div>'
+      + (entry.result.missed ? '<div class="miss">' + t("targetMiss") + '</div>' : '')
+      + '</div><button type="button" class="btn btn-outline btn-small" data-dl="' + idx + '">' + t("download") + '</button></div>';
+  });
+  resultsList.innerHTML = html;
+  var totSaved = totOrig > 0 ? Math.round((1 - totNew / totOrig) * 100) : 0;
+  summaryBox.textContent = t("summary").replace("{a}", fmtBytes(totOrig)).replace("{b}", fmtBytes(totNew)).replace("{s}", totSaved);
+  resultsList.querySelectorAll("[data-dl]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var entry = state.files[parseInt(btn.getAttribute("data-dl"), 10)];
+      if (entry && entry.result){ downloadBlob(entry.result.blob, outName(entry)); }
+    });
+  });
+}
+function escapeHtml(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function downloadBlob(blob, filename){
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function addFiles(list){
+  hideError();
+  var bad = [];
+  var added = 0;
+  Array.prototype.forEach.call(list, function(file){
+    if (!file.type || file.type.indexOf("image/") !== 0 || file.type === "image/svg+xml"){ bad.push(file.name); return; }
+    state.files.push({ file: file, name: file.name, imgData: null, origW: 0, origH: 0, result: null, failed: false });
+    added++;
+  });
+  if (bad.length > 0){ showError(bad.join(", ") + " " + t("notImage")); }
+  if (added > 0){ processAll(); }
+  else { render(); }
+}
+function clearAll(){
+  state.files.forEach(function(entry){
+    if (entry.result && entry.result.url){ try { URL.revokeObjectURL(entry.result.url); } catch(e){} }
+  });
+  state.files = [];
+  hideError();
+  render();
+}
+document.getElementById("chooseBtn").addEventListener("click", function(){ fileInput.click(); });
+fileInput.addEventListener("change", function(){ addFiles(fileInput.files); fileInput.value = ""; });
+dropZone.addEventListener("dragover", function(e){ e.preventDefault(); dropZone.classList.add("drag"); });
+dropZone.addEventListener("dragleave", function(){ dropZone.classList.remove("drag"); });
+dropZone.addEventListener("drop", function(e){
+  e.preventDefault(); dropZone.classList.remove("drag");
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0){ addFiles(e.dataTransfer.files); }
+});
+qualityRange.addEventListener("input", function(){ qualityVal.textContent = qualityRange.value + "%"; });
+qualityRange.addEventListener("change", function(){ processAll(); });
+formatSel.addEventListener("change", function(){
+  var isPng = formatSel.value === "png";
+  qualityRange.disabled = isPng;
+  pngNote.style.display = isPng ? "block" : "none";
+  processAll();
+});
+[targetInput, maxWInput, maxHInput, scaleInput].forEach(function(el){
+  el.addEventListener("change", function(){ processAll(); });
+});
+document.getElementById("zipBtn").addEventListener("click", function(){
+  var done = state.files.filter(function(e){ return e.result && !e.failed; });
+  if (done.length === 0){ return; }
+  if (typeof JSZip === "undefined"){
+    done.forEach(function(entry){ downloadBlob(entry.result.blob, outName(entry)); });
+    return;
+  }
+  var zip = new JSZip();
+  done.forEach(function(entry){ zip.file(outName(entry), entry.result.blob); });
+  zip.generateAsync({ type: "blob" }).then(function(content){
+    downloadBlob(content, "compressed-images.zip");
+  });
+});
+document.getElementById("clearBtn").addEventListener("click", clearAll);
+document.getElementById("langEn").addEventListener("click", function(){ applyLang("en"); });
+document.getElementById("langMl").addEventListener("click", function(){ applyLang("ml"); });
+(function init(){
+  var saved = "en";
+  try { saved = localStorage.getItem("img-compressor-lang") || "en"; } catch(e){}
+  if (saved !== "en" && saved !== "ml"){ saved = "en"; }
+  applyLang(saved);
+})();
+</script>
+</body>
+</html>
