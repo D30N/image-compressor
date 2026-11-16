@@ -519,7 +519,7 @@ themeBtn.addEventListener("click", function(){
   var savedTheme = null;
   try { savedTheme = localStorage.getItem("img-compressor-theme"); } catch(e){}
   if (savedTheme !== "dark" && savedTheme !== "light"){
-    savedTheme = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    savedTheme = "dark";
   }
   applyTheme(savedTheme);
 })();
