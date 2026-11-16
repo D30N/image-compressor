@@ -39,6 +39,8 @@
   .btn-outline{background:#fff;border:1px solid var(--teal-border);color:var(--teal-dark)}
   .btn:disabled{opacity:.5;cursor:not-allowed}
   .hint{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
+  .pills{margin-top:12px;text-align:center}
+  .pill{display:inline-block;background:#dcfce7;color:#166534;border:1px solid #86efac;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;margin:3px;max-width:230px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
   .error{display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:14px}
   .error.show{display:block}
   .settings h3{margin:0 0 14px;font-size:17px}
@@ -93,7 +95,7 @@
         <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" multiple>
       </div>
       <p class="hint" data-i18n="hint">Your file is read only inside this browser tab. Nothing is uploaded to any server, and nothing is saved after you close the page.</p>
-      <p class="hint" id="selectedText" style="display:none"></p>
+      <div class="pills" id="selectedPills" style="display:none"></div>
       <div class="error" id="errorBox" role="alert"></div>
 
       <p class="hint" id="progressText" style="display:none" data-i18n="processing">Compressing...</p>
@@ -154,7 +156,7 @@ var LANGS = {
     pngNote: "PNG is lossless, so the quality setting has no effect on it.",
     resultsTitle: "Results", downloadAll: "Download all (.zip)", clearAll: "Clear all",
     download: "Download", processing: "Compressing...",
-    compressBtn: "Compress images", selected: "{n} images selected",
+    compressBtn: "Compress images",
     smaller: "smaller", notImage: "is not an image file.",
     targetMiss: "Target not reached, used lowest quality.",
     summary: "Total: {a} to {b} ({s}% smaller)"
@@ -173,7 +175,7 @@ var LANGS = {
     pngNote: "PNG lossless ആണ്, അതുകൊണ്ട് quality setting അതിന് ബാധകമല്ല.",
     resultsTitle: "ഫലങ്ങൾ", downloadAll: "എല്ലാം download ചെയ്യുക (.zip)", clearAll: "എല്ലാം മായ്ക്കുക",
     download: "Download", processing: "Compress ചെയ്യുന്നു...",
-    compressBtn: "Compress ചെയ്യുക", selected: "{n} ഫോട്ടോ തിരഞ്ഞെടുത്തു",
+    compressBtn: "Compress ചെയ്യുക",
     smaller: "കുറവ്", notImage: "ഒരു image ഫയൽ അല്ല.",
     targetMiss: "Target എത്തിയില്ല, ഏറ്റവും കുറഞ്ഞ quality ഉപയോഗിച്ചു.",
     summary: "ആകെ: {a} മുതൽ {b} വരെ ({s}% കുറവ്)"
@@ -366,10 +368,15 @@ function clearAll(){
 }
 function updateCompressState(){
   var btn = document.getElementById("compressBtn");
-  var sel = document.getElementById("selectedText");
+  var box = document.getElementById("selectedPills");
   btn.disabled = state.files.length === 0;
-  if (state.files.length > 0){ sel.textContent = t("selected").replace("{n}", state.files.length); sel.style.display = "block"; }
-  else { sel.textContent = ""; sel.style.display = "none"; }
+  if (state.files.length > 0){
+    var html = "";
+    state.files.forEach(function(entry){ html += '<span class="pill">' + escapeHtml(entry.name) + '</span>'; });
+    box.innerHTML = html;
+    box.style.display = "block";
+  }
+  else { box.innerHTML = ""; box.style.display = "none"; }
 }
 document.getElementById("compressBtn").addEventListener("click", function(){ processAll(); });
 document.getElementById("chooseBtn").addEventListener("click", function(){ fileInput.click(); });
