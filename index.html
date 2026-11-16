@@ -157,9 +157,9 @@ var LANGS = {
     resultsTitle: "Results", downloadAll: "Download all (.zip)", clearAll: "Clear all",
     download: "Download", processing: "Compressing...",
     compressBtn: "Compress images",
-    smaller: "smaller", notImage: "is not an image file.",
+    smaller: "smaller", larger: "larger", notImage: "is not an image file.",
     targetMiss: "Target not reached, used lowest quality.",
-    summary: "Total: {a} to {b} ({s}% smaller)"
+    summary: "Total: {a} to {b} ({s}% {w})"
   },
   ml: {
     badgePrivate: "100% private", badgeNote: "ലോഗിൻ ഇല്ല, അപ്‌ലോഡ് ഇല്ല, ട്രാക്കിംഗ് ഇല്ല",
@@ -176,9 +176,9 @@ var LANGS = {
     resultsTitle: "ഫലങ്ങൾ", downloadAll: "എല്ലാം download ചെയ്യുക (.zip)", clearAll: "എല്ലാം മായ്ക്കുക",
     download: "Download", processing: "Compress ചെയ്യുന്നു...",
     compressBtn: "Compress ചെയ്യുക",
-    smaller: "കുറവ്", notImage: "ഒരു image ഫയൽ അല്ല.",
+    smaller: "കുറവ്", larger: "കൂടുതൽ", notImage: "ഒരു image ഫയൽ അല്ല.",
     targetMiss: "Target എത്തിയില്ല, ഏറ്റവും കുറഞ്ഞ quality ഉപയോഗിച്ചു.",
-    summary: "ആകെ: {a} മുതൽ {b} വരെ ({s}% കുറവ്)"
+    summary: "ആകെ: {a} മുതൽ {b} വരെ ({s}% {w})"
   }
 };
 function t(key){ return (LANGS[state.lang] && LANGS[state.lang][key]) || LANGS.en[key] || key; }
@@ -319,16 +319,18 @@ function render(){
     var idx = state.files.indexOf(entry);
     totOrig += entry.file.size; totNew += entry.result.size;
     var saved = entry.file.size > 0 ? Math.round((1 - entry.result.size / entry.file.size) * 100) : 0;
+    var saveWord = saved >= 0 ? t("smaller") : t("larger");
     html += '<div class="item"><img src="' + entry.result.url + '" alt="">'
       + '<div class="meta"><div class="name">' + escapeHtml(entry.name) + '</div>'
-      + '<div class="sizes">' + fmtBytes(entry.file.size) + ' &rarr; <b>' + fmtBytes(entry.result.size) + ' (' + saved + '% ' + t("smaller") + ')</b></div>'
+      + '<div class="sizes">' + fmtBytes(entry.file.size) + ' &rarr; <b>' + fmtBytes(entry.result.size) + ' (' + Math.abs(saved) + '% ' + saveWord + ')</b></div>'
       + '<div class="dims">' + entry.origW + ' &times; ' + entry.origH + ' &rarr; ' + entry.result.w + ' &times; ' + entry.result.h + '</div>'
       + (entry.result.missed ? '<div class="miss">' + t("targetMiss") + '</div>' : '')
       + '</div><button type="button" class="btn btn-outline btn-small" data-dl="' + idx + '">' + t("download") + '</button></div>';
   });
   resultsList.innerHTML = html;
   var totSaved = totOrig > 0 ? Math.round((1 - totNew / totOrig) * 100) : 0;
-  summaryBox.textContent = t("summary").replace("{a}", fmtBytes(totOrig)).replace("{b}", fmtBytes(totNew)).replace("{s}", totSaved);
+  var totWord = totSaved >= 0 ? t("smaller") : t("larger");
+  summaryBox.textContent = t("summary").replace("{a}", fmtBytes(totOrig)).replace("{b}", fmtBytes(totNew)).replace("{s}", Math.abs(totSaved)).replace("{w}", totWord);
   resultsList.querySelectorAll("[data-dl]").forEach(function(btn){
     btn.addEventListener("click", function(){
       var entry = state.files[parseInt(btn.getAttribute("data-dl"), 10)];
