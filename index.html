@@ -86,7 +86,7 @@
         <div class="row"><label for="formatSel" data-i18n="formatLabel">Output format</label><select id="formatSel"><option value="jpeg">JPG</option><option value="png">PNG</option><option value="webp">WebP</option></select></div>
         <p class="note" id="pngNote" style="display:none" data-i18n="pngNote">PNG is lossless, so the quality setting has no effect on it.</p>
         <div class="row"><label for="targetInput" data-i18n="targetLabel">Target size (KB, optional)</label><input type="number" id="targetInput" min="10" data-i18n-ph="targetPh" placeholder="e.g. 200"></div>
-        <div class="row"><label data-i18n="resizeLabel">Resize (optional)</label><input type="number" id="maxW" min="1" data-i18n-ph="maxWPh" placeholder="Max width (px)"><input type="number" id="maxH" min="1" data-i18n-ph="maxHPh" placeholder="Max height (px)"><input type="number" id="scalePct" min="1" max="100" data-i18n-ph="scalePh" placeholder="Scale (%)"></div>
+        <div class="row"><label data-i18n="resizeLabel">Resize (optional)</label><input type="number" id="maxW" min="1" data-i18n-ph="maxWPh" placeholder="Width (px)"><input type="number" id="maxH" min="1" data-i18n-ph="maxHPh" placeholder="Height (px)"><input type="number" id="scalePct" min="1" max="100" data-i18n-ph="scalePh" placeholder="Scale (%)"></div>
       </div>
 
       <div class="results" id="resultsBox" style="display:none">
@@ -131,7 +131,7 @@ var LANGS = {
     hint: "Your file is read only inside this browser tab. Nothing is uploaded to any server, and nothing is saved after you close the page.",
     settingsTitle: "Settings", qualityLabel: "Quality", formatLabel: "Output format",
     targetLabel: "Target size (KB, optional)", targetPh: "e.g. 200",
-    resizeLabel: "Resize (optional)", maxWPh: "Max width (px)", maxHPh: "Max height (px)", scalePh: "Scale (%)",
+    resizeLabel: "Resize (optional)", maxWPh: "Width (px)", maxHPh: "Height (px)", scalePh: "Scale (%)",
     pngNote: "PNG is lossless, so the quality setting has no effect on it.",
     resultsTitle: "Results", downloadAll: "Download all (.zip)", clearAll: "Clear all",
     download: "Download", processing: "Compressing...",
@@ -149,7 +149,7 @@ var LANGS = {
     hint: "നിങ്ങളുടെ ഫയൽ ഈ browser tab-ൽ മാത്രമേ വായിക്കൂ. ഒന്നും server-ലേക്ക് upload ആകില്ല, പേജ് അടച്ചാൽ ഒന്നും save ആകില്ല.",
     settingsTitle: "ക്രമീകരണങ്ങൾ", qualityLabel: "Quality", formatLabel: "Output format",
     targetLabel: "Target size (KB, optional)", targetPh: "ഉദാ. 200",
-    resizeLabel: "Resize (optional)", maxWPh: "Max width (px)", maxHPh: "Max height (px)", scalePh: "Scale (%)",
+    resizeLabel: "Resize (optional)", maxWPh: "Width (px)", maxHPh: "Height (px)", scalePh: "Scale (%)",
     pngNote: "PNG lossless ആണ്, അതുകൊണ്ട് quality setting അതിന് ബാധകമല്ല.",
     resultsTitle: "ഫലങ്ങൾ", downloadAll: "എല്ലാം download ചെയ്യുക (.zip)", clearAll: "എല്ലാം മായ്ക്കുക",
     download: "Download", processing: "Compress ചെയ്യുന്നു...",
