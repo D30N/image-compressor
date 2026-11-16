@@ -69,6 +69,12 @@
   .item .dims{font-size:12px;color:var(--muted);margin-top:2px}
   .item .miss{font-size:12px;color:#b45309;margin-top:2px}
   .actions{margin-top:6px}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .modal-box{position:relative;background:#fff;border-radius:14px;padding:14px;max-width:min(920px,94vw);max-height:90vh;overflow:auto;text-align:center}
+  .modal-box img{max-width:100%;max-height:72vh;border-radius:10px;display:block;margin:0 auto}
+  .modal-close{position:absolute;top:8px;right:10px;border:0;background:#111827;color:#fff;width:32px;height:32px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;font-family:inherit}
+  .modal-cap{margin-top:10px;font-size:14px;color:var(--muted)}
+  .modal-cap b{color:#047857}
   footer{text-align:center;margin-top:34px;font-size:14px}
   footer a{color:var(--teal);text-decoration:underline;font-weight:600}
 </style>
@@ -122,6 +128,13 @@
 
   <footer><a href="https://deepakdeon.github.io">This app was made by Deon</a></footer>
 </div>
+<div class="modal" id="previewModal" style="display:none" role="dialog" aria-modal="true">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    <img id="modalImg" src="" alt="">
+    <div class="modal-cap" id="modalCap"></div>
+  </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 var state = { files: [], lang: "en" };
@@ -155,7 +168,7 @@ var LANGS = {
     resizeLabel: "Resize (optional)", maxWPh: "Width (px)", maxHPh: "Height (px)", scalePh: "Scale (%)",
     pngNote: "PNG is lossless, so the quality setting has no effect on it.",
     resultsTitle: "Results", downloadAll: "Download all (.zip)", clearAll: "Clear all",
-    download: "Download", processing: "Compressing...",
+    download: "Download", view: "View", processing: "Compressing...",
     compressBtn: "Compress images",
     smaller: "smaller", larger: "larger", notImage: "is not an image file.",
     targetMiss: "Target not reached, used lowest quality.",
@@ -174,7 +187,7 @@ var LANGS = {
     resizeLabel: "Resize (optional)", maxWPh: "Width (px)", maxHPh: "Height (px)", scalePh: "Scale (%)",
     pngNote: "PNG lossless ആണ്, അതുകൊണ്ട് quality setting അതിന് ബാധകമല്ല.",
     resultsTitle: "ഫലങ്ങൾ", downloadAll: "എല്ലാം download ചെയ്യുക (.zip)", clearAll: "എല്ലാം മായ്ക്കുക",
-    download: "Download", processing: "Compress ചെയ്യുന്നു...",
+    download: "Download", view: "കാണുക", processing: "Compress ചെയ്യുന്നു...",
     compressBtn: "Compress ചെയ്യുക",
     smaller: "കുറവ്", larger: "കൂടുതൽ", notImage: "ഒരു image ഫയൽ അല്ല.",
     targetMiss: "Target എത്തിയില്ല, ഏറ്റവും കുറഞ്ഞ quality ഉപയോഗിച്ചു.",
@@ -325,7 +338,7 @@ function render(){
       + '<div class="sizes">' + fmtBytes(entry.file.size) + ' &rarr; <b>' + fmtBytes(entry.result.size) + ' (' + Math.abs(saved) + '% ' + saveWord + ')</b></div>'
       + '<div class="dims">' + entry.origW + ' &times; ' + entry.origH + ' &rarr; ' + entry.result.w + ' &times; ' + entry.result.h + '</div>'
       + (entry.result.missed ? '<div class="miss">' + t("targetMiss") + '</div>' : '')
-      + '</div><button type="button" class="btn btn-outline btn-small" data-dl="' + idx + '">' + t("download") + '</button></div>';
+      + '</div><button type="button" class="btn btn-outline btn-small" data-view="' + idx + '">' + t("view") + '</button><button type="button" class="btn btn-outline btn-small" data-dl="' + idx + '">' + t("download") + '</button></div>';
   });
   resultsList.innerHTML = html;
   var totSaved = totOrig > 0 ? Math.round((1 - totNew / totOrig) * 100) : 0;
@@ -337,7 +350,32 @@ function render(){
       if (entry && entry.result){ downloadBlob(entry.result.blob, outName(entry)); }
     });
   });
+  resultsList.querySelectorAll("[data-view]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var entry = state.files[parseInt(btn.getAttribute("data-view"), 10)];
+      if (entry && entry.result){ openPreview(entry); }
+    });
+  });
 }
+function openPreview(entry){
+  var modal = document.getElementById("previewModal");
+  var img = document.getElementById("modalImg");
+  var cap = document.getElementById("modalCap");
+  var saved = entry.file.size > 0 ? Math.round((1 - entry.result.size / entry.file.size) * 100) : 0;
+  var word = saved >= 0 ? t("smaller") : t("larger");
+  img.src = entry.result.url;
+  img.alt = entry.name;
+  cap.innerHTML = escapeHtml(entry.name) + " &middot; " + fmtBytes(entry.file.size) + " &rarr; <b>" + fmtBytes(entry.result.size) + " (" + Math.abs(saved) + "% " + word + ")</b> &middot; " + entry.result.w + " &times; " + entry.result.h;
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+function closePreview(){
+  document.getElementById("previewModal").style.display = "none";
+  document.body.style.overflow = "";
+}
+document.getElementById("modalClose").addEventListener("click", closePreview);
+document.getElementById("previewModal").addEventListener("click", function(e){ if (e.target === this){ closePreview(); } });
+document.addEventListener("keydown", function(e){ if (e.key === "Escape"){ closePreview(); } });
 function escapeHtml(s){ return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
 function downloadBlob(blob, filename){
   var a = document.createElement("a");
