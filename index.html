@@ -171,7 +171,7 @@ var LANGS = {
     download: "Download", view: "View", processing: "Compressing...",
     compressBtn: "Compress images",
     smaller: "smaller", larger: "larger", notImage: "is not an image file.",
-    targetMiss: "Target not reached, used lowest quality.",
+    targetMiss: "Target not reached, used smallest available.",
     summary: "Total: {a} to {b} ({s}% {w})"
   },
   ml: {
@@ -190,7 +190,7 @@ var LANGS = {
     download: "Download", view: "കാണുക", processing: "Compress ചെയ്യുന്നു...",
     compressBtn: "Compress ചെയ്യുക",
     smaller: "കുറവ്", larger: "കൂടുതൽ", notImage: "ഒരു image ഫയൽ അല്ല.",
-    targetMiss: "Target എത്തിയില്ല, ഏറ്റവും കുറഞ്ഞ quality ഉപയോഗിച്ചു.",
+    targetMiss: "Target എത്തിയില്ല, ഏറ്റവും ചെറുത് ഉപയോഗിച്ചു.",
     summary: "ആകെ: {a} മുതൽ {b} വരെ ({s}% {w})"
   }
 };
@@ -267,21 +267,29 @@ function processEntry(entry){
   return chain.then(function(){
     var dims = computeDims(entry.origW, entry.origH, s);
     var canvas = document.createElement("canvas");
-    canvas.width = dims.w; canvas.height = dims.h;
     var ctx = canvas.getContext("2d");
-    if (s.mime === "image/jpeg"){ ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, dims.w, dims.h); }
-    ctx.drawImage(entry.imgData.img, 0, 0, dims.w, dims.h);
-    function finish(blob, qUsed, missed){
+    function drawAt(w, h){
+      canvas.width = w; canvas.height = h;
+      if (s.mime === "image/jpeg"){ ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, w, h); }
+      ctx.drawImage(entry.imgData.img, 0, 0, w, h);
+    }
+    function finish(blob, qUsed, missed, w, h){
       if (entry.result && entry.result.url){ try { URL.revokeObjectURL(entry.result.url); } catch(e){} }
-      entry.result = { blob: blob, url: URL.createObjectURL(blob), size: blob.size, w: dims.w, h: dims.h, qualityUsed: qUsed, missed: !!missed };
+      entry.result = { blob: blob, url: URL.createObjectURL(blob), size: blob.size, w: w, h: h, qualityUsed: qUsed, missed: !!missed };
       return entry;
     }
-    if (s.targetBytes > 0 && s.format !== "png"){
+    function encodeAt(w, h){
+      drawAt(w, h);
+      if (s.format === "png"){
+        return canvasBlob(canvas, s.mime).then(function(b){
+          return { blob: b, q: 1, fitted: b && b.size <= s.targetBytes };
+        });
+      }
       var lo = 0.05, hi = 0.95, best = null, bestQ = 0.05, step = 0;
       function tryNext(){
         if (step >= 7){
-          if (best){ return finish(best, bestQ, false); }
-          return canvasBlob(canvas, s.mime, 0.05).then(function(b){ return finish(b, 0.05, true); });
+          if (best){ return { blob: best, q: bestQ, fitted: true }; }
+          return canvasBlob(canvas, s.mime, 0.05).then(function(b){ return { blob: b, q: 0.05, fitted: false }; });
         }
         var mid = (lo + hi) / 2;
         step++;
@@ -293,8 +301,29 @@ function processEntry(entry){
       }
       return tryNext();
     }
+    if (s.targetBytes > 0){
+      var scales = [1];
+      var edge = Math.max(dims.w, dims.h);
+      var f = 1;
+      while (edge * f > 320 && scales.length < 7){ f = f * 0.7; scales.push(f); }
+      var smallest = null;
+      function attempt(i){
+        if (i >= scales.length){
+          return finish(smallest.blob, smallest.q, true, smallest.w, smallest.h);
+        }
+        var w = Math.max(1, Math.round(dims.w * scales[i]));
+        var h = Math.max(1, Math.round(dims.h * scales[i]));
+        return encodeAt(w, h).then(function(res){
+          if (res.fitted){ return finish(res.blob, res.q, false, w, h); }
+          if (res.blob && (!smallest || res.blob.size < smallest.blob.size)){ smallest = { blob: res.blob, q: res.q, w: w, h: h }; }
+          return attempt(i + 1);
+        });
+      }
+      return attempt(0);
+    }
+    drawAt(dims.w, dims.h);
     return canvasBlob(canvas, s.mime, s.format === "png" ? undefined : s.quality).then(function(b){
-      return finish(b, s.quality, s.targetBytes > 0 && b.size > s.targetBytes);
+      return finish(b, s.quality, false, dims.w, dims.h);
     });
   }).catch(function(){
     entry.failed = true;
