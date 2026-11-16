@@ -6,35 +6,40 @@
 <title>Image Compressor - Compress Photos Online Free</title>
 <meta name="description" content="Compress JPG, PNG and WebP images free in your browser. No login, no upload.">
 <style>
-  :root{--grad:linear-gradient(90deg,#f97316,#ec4899,#8b5cf6);--pink:#ec4899;--green:#16a34a;--muted:#6b7280;--line:#e5e7eb;--card:#fff;--radius:18px;--shadow:0 10px 30px rgba(0,0,0,.06)}
+  :root{--teal:#0d9488;--teal-dark:#0f766e;--teal-light:#ccfbf1;--teal-border:#5eead4;--mint:#f0fdfa;--ink:#134e4a;--muted:#5f7370;--line:#d7e8e3;--card:#fff;--radius:16px;--shadow:0 8px 24px rgba(13,148,136,.08)}
   *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f9fafb;color:#111827}
-  .wrap{max-width:760px;margin:0 auto;padding:28px 16px 60px}
-  header{text-align:center}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--mint);color:var(--ink)}
+  .wrap{max-width:980px;margin:0 auto;padding:22px 16px 60px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
+  .brand{font-size:19px;font-weight:800;color:var(--ink)}
+  .brand .bicon{font-size:22px;vertical-align:-2px}
   .lang{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:999px;padding:3px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
   .lang-btn{border:0;background:none;padding:7px 16px;border-radius:999px;font-size:14px;font-weight:700;cursor:pointer;color:#374151;font-family:inherit}
-  .lang-btn.active{background:#111827;color:#fff}
-  .badge{display:inline-block;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;color:#374151;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-  .badge span{color:var(--green)}
-  h1{font-size:clamp(30px,6vw,46px);line-height:1.12;margin:18px 0 10px;letter-spacing:-.02em}
-  h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:var(--muted);font-size:17px;max-width:620px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-top:26px}
-  .drop{display:block;border:2px dashed #d1d5db;border-radius:14px;padding:38px 20px;text-align:center;cursor:default;transition:.15s;background:#fff}
-  .drop:hover,.drop.drag{border-color:var(--pink);background:#fff5f8}
+  .lang-btn.active{background:var(--teal);color:#fff}
+  .intro{text-align:left}
+  .chip{display:inline-block;background:var(--teal-light);color:var(--teal-dark);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+  .chip span{color:var(--teal)}
+  h1{font-size:clamp(26px,4.5vw,38px);line-height:1.15;margin:14px 0 8px;letter-spacing:-.02em}
+  h1 .accent{color:var(--teal)}
+  .sub{color:var(--muted);font-size:16px;max-width:640px;margin:0}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start;margin-top:22px}
+  @media (max-width:780px){.layout{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+  .drop{display:block;border:2px dashed var(--teal-border);border-radius:14px;padding:38px 20px;text-align:center;cursor:default;transition:.15s;background:#f0fdfa}
+  .drop:hover,.drop.drag{border-color:var(--teal);background:var(--teal-light)}
   .drop .icon{font-size:42px;line-height:1}
   .drop h2{margin:12px 0 6px;font-size:20px}
   .drop p{margin:0;color:var(--muted);font-size:15px}
   .drop input{display:none}
   .btn{display:inline-block;border:0;border-radius:999px;padding:12px 22px;font-size:15px;font-weight:700;cursor:pointer;text-decoration:none;font-family:inherit}
-  .btn-primary{background:var(--grad);color:#fff;margin-top:16px}
-  .btn-ghost{background:#f3f4f6;color:#111827;margin-top:16px}
+  .btn-primary{background:var(--teal);color:#fff;margin-top:16px}
+  .btn-primary:hover{background:var(--teal-dark)}
+  .btn-ghost{background:#e6f7f3;color:var(--ink);margin-top:16px}
   .btn-small{padding:8px 14px;font-size:13px;margin:0 6px 6px 0}
-  .btn-outline{background:#fff;border:1px solid var(--line);color:#111827}
+  .btn-outline{background:#fff;border:1px solid var(--teal-border);color:var(--teal-dark)}
   .hint{font-size:13px;color:var(--muted);text-align:center;margin-top:12px}
   .error{display:none;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:12px 14px;margin-top:14px;font-size:14px}
   .error.show{display:block}
-  .settings{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
   .settings h3{margin:0 0 14px;font-size:17px}
   .row{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap}
   .row label{font-size:14px;font-weight:600;min-width:150px}
@@ -42,33 +47,41 @@
   .row input[type=number],.row select{padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px;font-family:inherit;background:#fff}
   .row input[type=number]{width:110px}
   .qval{font-weight:700;font-size:14px;min-width:44px}
-  .note{font-size:13px;color:var(--muted);margin:-6px 0 14px 162px}
+  .note{font-size:13px;color:var(--muted);margin:-6px 0 14px 0}
+  .side-col .row{display:block}
+  .side-col .row label{display:block;min-width:0;margin-bottom:6px}
+  .side-col .row input[type=range]{width:100%}
+  .side-col .row input[type=number],.side-col .row select{width:100%}
+  .side-col .qval{display:inline-block;margin-top:4px}
   .results{margin-top:22px}
   .results h3{margin:0 0 12px;font-size:17px}
-  .summary{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:12px 14px;font-size:14px;font-weight:600;margin-bottom:14px}
+  .summary{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46;border-radius:10px;padding:12px 14px;font-size:14px;font-weight:600;margin-bottom:14px}
   .item{display:flex;gap:14px;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:12px;background:#fff;align-items:center;flex-wrap:wrap}
   .item img{width:84px;height:84px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
   .item .meta{flex:1;min-width:180px}
   .item .name{font-weight:700;font-size:14px;word-break:break-all}
   .item .sizes{font-size:13px;color:var(--muted);margin-top:4px}
-  .item .sizes b{color:#166534}
+  .item .sizes b{color:#047857}
   .item .dims{font-size:12px;color:var(--muted);margin-top:2px}
   .item .miss{font-size:12px;color:#b45309;margin-top:2px}
   .actions{margin-top:6px}
   footer{text-align:center;margin-top:34px;font-size:14px}
-  footer a{color:var(--pink);text-decoration:underline;font-weight:600}
+  footer a{color:var(--teal);text-decoration:underline;font-weight:600}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <header>
+  <header class="topbar">
+    <div class="brand"><span class="bicon">&#128444;</span> Image Compressor</div>
     <div class="lang"><button type="button" class="lang-btn active" id="langEn">English</button><button type="button" class="lang-btn" id="langMl">മലയാളം</button></div>
-    <div style="margin-top:14px"><div class="badge"><span>&#9679; </span><span data-i18n="badgePrivate">100% private</span> &nbsp;<span data-i18n="badgeNote">No login, no upload, no tracking</span></div></div>
-    <h1><span data-i18n="h1a">Make your photos</span> <span class="grad" data-i18n="h1b">smaller, instantly</span></h1>
-    <p class="sub" data-i18n="sub">Drop your photos below. They are compressed right inside your browser, nothing is uploaded to any server.</p>
   </header>
+  <div class="intro">
+    <div class="chip"><span>&#9679; </span><span data-i18n="badgePrivate">100% private</span> &nbsp;<span data-i18n="badgeNote">No login, no upload, no tracking</span></div>
+    <h1><span data-i18n="h1a">Make your photos</span> <span class="accent" data-i18n="h1b">smaller, instantly</span></h1>
+    <p class="sub" data-i18n="sub">Drop your photos below. They are compressed right inside your browser, nothing is uploaded to any server.</p>
+  </div>
 
-  <main>
+  <main class="layout">
     <section class="card" id="uploadCard">
       <div class="drop" id="dropZone">
         <div class="icon">&#128193;</div>
@@ -80,15 +93,6 @@
       <p class="hint" data-i18n="hint">Your file is read only inside this browser tab. Nothing is uploaded to any server, and nothing is saved after you close the page.</p>
       <div class="error" id="errorBox" role="alert"></div>
 
-      <div class="settings">
-        <h3 data-i18n="settingsTitle">Settings</h3>
-        <div class="row"><label for="qualityRange" data-i18n="qualityLabel">Quality</label><input type="range" id="qualityRange" min="10" max="100" value="80"><span class="qval" id="qualityVal">80%</span></div>
-        <div class="row"><label for="formatSel" data-i18n="formatLabel">Output format</label><select id="formatSel"><option value="jpeg">JPG</option><option value="png">PNG</option><option value="webp">WebP</option></select></div>
-        <p class="note" id="pngNote" style="display:none" data-i18n="pngNote">PNG is lossless, so the quality setting has no effect on it.</p>
-        <div class="row"><label for="targetInput" data-i18n="targetLabel">Target size (KB, optional)</label><input type="number" id="targetInput" min="10" data-i18n-ph="targetPh" placeholder="e.g. 200"></div>
-        <div class="row"><label data-i18n="resizeLabel">Resize (optional)</label><input type="number" id="maxW" min="1" data-i18n-ph="maxWPh" placeholder="Width (px)"><input type="number" id="maxH" min="1" data-i18n-ph="maxHPh" placeholder="Height (px)"><input type="number" id="scalePct" min="1" max="100" data-i18n-ph="scalePh" placeholder="Scale (%)"></div>
-      </div>
-
       <div class="results" id="resultsBox" style="display:none">
         <h3 data-i18n="resultsTitle">Results</h3>
         <div class="summary" id="summaryBox"></div>
@@ -97,6 +101,16 @@
       </div>
       <p class="hint" id="progressText" style="display:none" data-i18n="processing">Compressing...</p>
     </section>
+    <aside class="card side-col">
+      <div class="settings">
+        <h3 data-i18n="settingsTitle">Settings</h3>
+        <div class="row"><label for="qualityRange" data-i18n="qualityLabel">Quality</label><input type="range" id="qualityRange" min="10" max="100" value="80"><span class="qval" id="qualityVal">80%</span></div>
+        <div class="row"><label for="formatSel" data-i18n="formatLabel">Output format</label><select id="formatSel"><option value="jpeg">JPG</option><option value="png">PNG</option><option value="webp">WebP</option></select></div>
+        <p class="note" id="pngNote" style="display:none" data-i18n="pngNote">PNG is lossless, so the quality setting has no effect on it.</p>
+        <div class="row"><label for="targetInput" data-i18n="targetLabel">Target size (KB, optional)</label><input type="number" id="targetInput" min="10" data-i18n-ph="targetPh" placeholder="e.g. 200"></div>
+        <div class="row"><label data-i18n="resizeLabel">Resize (optional)</label><input type="number" id="maxW" min="1" data-i18n-ph="maxWPh" placeholder="Width (px)"><input type="number" id="maxH" min="1" data-i18n-ph="maxHPh" placeholder="Height (px)"><input type="number" id="scalePct" min="1" max="100" data-i18n-ph="scalePh" placeholder="Scale (%)"></div>
+      </div>
+    </aside>
   </main>
 
   <footer><a href="https://deepakdeon.github.io">This app was made by Deon</a></footer>
